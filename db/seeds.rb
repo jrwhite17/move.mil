@@ -67,3 +67,12 @@ transportation_offices.each do |office|
 
   TransportationOffice.create(office.except('shipping_office_name').merge(shipping_office_id: shipping_office_id))
 end
+
+puts 'Loading household goods weights...'
+hhg_weights = JSON.parse(File.read(Rails.root.join('db', 'seeds', 'hhg_weights.json')))
+
+hhg_weights.each do |category, hhgs|
+  hhgs.each do |name, weight|
+    HouseholdGood.where(name: name, category: category).first_or_create(name: name, weight: weight, category: category)
+  end
+end
